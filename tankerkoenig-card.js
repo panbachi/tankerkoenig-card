@@ -3,7 +3,7 @@ class TankerkoenigCard extends HTMLElement {
                 if(!this.content) {
                         const card = document.createElement('ha-card');
 
-                        card.header = this.config.name || 'Tankerkönig';
+                        card.header = this.config.name || 'TankerkÃ¶nig';
 
                         this.content = document.createElement('div');
                         this.content.className = 'container';
@@ -74,7 +74,7 @@ class TankerkoenigCard extends HTMLElement {
                 if(state) {
                         return `
                               <td><ha-label-badge
-                              value="${state.state}€"
+                              value="${state.state}&euro;"
                               label="${label}"
                               ></ha-label-badge></td>
                         `;
