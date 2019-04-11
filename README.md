@@ -11,7 +11,7 @@
 
 ```yaml
 resources:
-  - url: /local/tankerkoenig-card.js
+  - url: /local/tankerkoenig-card.js?v=0.0.1
     type: js
 views:
   - cards:
