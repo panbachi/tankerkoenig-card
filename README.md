@@ -20,8 +20,8 @@ views:
         show:
           - e5
           - e10
-		show_closed: true
-		show_header: false
+        show_closed: true
+        show_header: false
         stations:
           - name: Kölner Str.
             brand: ARAL
