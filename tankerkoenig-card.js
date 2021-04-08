@@ -1,95 +1,161 @@
-class TankerkoenigCard extends HTMLElement {
-        set hass(hass) {
-                if(!this.content) {
-                        const card = document.createElement('ha-card');
+import {
+    LitElement,
+    html,
+    css,
+    property
+} from "https://unpkg.com/lit-element@2.3.1/lit-element.js?module";
 
-                        card.header = this.config.name || 'Tankerkönig';
-
-                        this.content = document.createElement('div');
-                        this.content.className = 'container';
-                        card.appendChild(this.content);
-
-                        const style = document.createElement('style');
-                        style.textContent = `
-                                .container { padding: 0 16px 16px; }
-                                td { text-align: center; padding-top: 10px; }
-                                td.street { text-align: left; font-weight: bold; }
-                                td.gasstation img { vertical-align: middle; }
-                                ha-label-badge { font-size: 85%; }
-
-                        `;
-                        card.appendChild(style);
-
-                        this.appendChild(card);
-                }
-
-                const e5 = this.config.show.indexOf('e5') !== -1;
-                const e10 = this.config.show.indexOf('e10') !== -1;
-                const diesel = this.config.show.indexOf('diesel') !== -1;
-
-                let content = `<table width="100%">`;
-
-                for(let i in this.config.stations) {
-                        let station = this.config.stations[i];
-
-                        let state = null;
-                        let label = '';
-
-                        content += `
-                            <tr>
-                                <td class="logo"><img height="40" width="40" src="/local/gasstation_logos/${station.brand.toLowerCase()}.png"></td>
-                                <td class="street">${station.name}</td>
-                        `;
-
-                        if(e5) {
-                                state = hass.states[station.e5] || null;
-                                label = 'E5';
-
-                                content += this._getCol(state, label);
-                        }
-
-                        if(e10) {
-                                state = hass.states[station.e10] || null;
-                                label = 'E10';
-
-                                content += this._getCol(state, label);
-                        }
-
-                        if(diesel) {
-                                state = hass.states[station.diesel] || null;
-                                label = 'Diesel';
-
-                                content += this._getCol(state, label);
-                        }
-
-                        content += '</tr>';
-                }
-
-                content += '</table>';
-
-                this.content.innerHTML = content;
+class TankerkoenigCard extends LitElement {
+    static get properties() {
+        return {
+            hass: {},
+            config: {}
+        };
+    }
+    
+    render() {
+        this.stations.sort((a, b) => {
+            let key = '';
+            
+            if(a.diesel) {
+                key = 'diesel';
+            } else if(a.e5) {
+                key = 'e5';
+            } else if(a.e10) {
+                key = 'e10';
+            }
+            
+            if(this.hass.states[a[key]].state === 'unknown' || this.hass.states[a[key]].state === 'unavailable') {
+                return 1;
+            }
+            
+            if(this.hass.states[b[key]].state === 'unknown' || this.hass.states[b[key]].state === 'unavailable') {
+                return -1;
+            }
+            
+            if(this.hass.states[a[key]].state > this.hass.states[b[key]].state) return 1;
+            if(this.hass.states[b[key]].state > this.hass.states[a[key]].state) return -1;
+            
+            return 0;
+        });
+        
+        let header = '';
+        
+        if(this.show_header === true) {
+            header = this.config.name || 'Tankerkönig';
         }
-
-        _getCol(state, label) {
-                if(state) {
-                        return `
-                              <td><ha-label-badge
-                              value="${state.state}&euro;"
-                              label="${label}"
-                              ></ha-label-badge></td>
-                        `;
-                } else {
-                        return '<td></td>';
-                }
+        
+        return html`<ha-card elevation="2" header="${header}">
+            <div class="container">
+                <table width="100%">
+                    ${this.stations.map((station) => {
+                    
+                        if(!this.isOpen(station) && this.config.show_closed !== true) return;
+                    
+                        return html`<tr>
+                        
+                        <td class="logo"><img height="40" width="40" src="/local/gasstation_logos/${station.brand.toLowerCase()}.png"></td>
+                        <td class="name">${station.name}</td>
+                        ${this.renderPrice(station, 'e5')}
+                        ${this.renderPrice(station, 'e10')}
+                        ${this.renderPrice(station, 'diesel')}
+                        
+                        
+                        </tr>`;
+                    })}
+                </table>
+            </div>
+        </ha-card>`;
+    }
+    
+    getStationState(station) {
+        let state = null;
+        
+        if(this.has.e5) {
+            state = this.hass.states[station.e5] || null;
+        } else if(this.has.e10) {
+            state = this.hass.states[station.e10] || null;
+        } else if(this.has.diesel) {
+            state = this.hass.states[station.diesel] || null;
         }
-
-        setConfig(config) {
-                this.config = config;
+        
+        return state;
+    }
+    
+    isOpen(station) {
+        const state = this.getStationState(station);
+        
+        if(state && state.attributes.is_open) {
+            return true;
         }
-
-        getCardSize() {
-                return this.config.stations.length + 1;
+        
+        return false;
+    }
+    
+    renderPrice(station, type) {
+        if(!this.has[type]) {
+            return;
         }
+        
+        const state = this.hass.states[station[type]] || null;
+            
+        if(state && state.state != 'unknown' && state.state != 'unavailable' && this.isOpen(station)) {
+            return html`<td><ha-label-badge
+              value="${state.state}&euro;"
+              label="${type.toUpperCase()}"
+              @click="${() => this.fireEvent('hass-more-info', station[type])}"
+              ></state-element></td>`;
+        } else {
+            return html`<td><ha-label-badge
+              icon="mdi:lock-outline"
+              label="${type.toUpperCase()}"
+              @click="${() => this.fireEvent('hass-more-info', station[type])}"
+              ></state-element></td>`;
+        }
+    }
+    
+    fireEvent(type, entityId, options = {}) {
+          const event = new Event(type, {
+              bubbles: options.bubbles || true,
+              cancelable: options.cancelable || true,
+              composed: options.composed || true,
+          });
+          event.detail = {entityId: entityId};
+          this.dispatchEvent(event);
+      }
+    
+    setConfig(config) {
+        this.config = config;
+        
+        if(this.config.show_header !== false) {
+            this.show_header = true;
+        } else {
+            this.show_header = false;
+        }
+        
+        this.has = {
+            e5: this.config.show.indexOf('e5') !== -1,
+            e10: this.config.show.indexOf('e10') !== -1,
+            diesel: this.config.show.indexOf('diesel') !== -1,
+        };
+        
+        
+        this.stations = this.config.stations.slice();
+    }
+    
+    getCardSize() {
+        return this.stations.length + 1;
+    }
+    
+    static get styles() {
+        return css`
+            .container { padding: 0 16px 16px; }
+            td { text-align: center; padding-top: 10px; }
+            td.name { text-align: left; font-weight: bold; }
+            td.gasstation img { vertical-align: middle; }
+            ha-label-badge { font-size: 85%; }
+        `;
+    }
 }
 
 customElements.define('tankerkoenig-card', TankerkoenigCard);

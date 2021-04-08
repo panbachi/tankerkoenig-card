@@ -1,6 +1,6 @@
 ﻿# Tankerkoenig Lovelace Card
 
-[![Version](https://img.shields.io/badge/version-0.1.0-green.svg?style=for-the-badge)](#) [![mantained](https://img.shields.io/maintenance/yes/2019.svg?style=for-the-badge)](#)
+[![Version](https://img.shields.io/badge/version-1.0.0-green.svg?style=for-the-badge)](#) [![mantained](https://img.shields.io/maintenance/yes/2021.svg?style=for-the-badge)](#) [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
 [![maintainer](https://img.shields.io/badge/maintainer-Goran%20Zunic%20%40panbachi-blue.svg?style=for-the-badge)](https://www.panbachi.de)
 
@@ -11,7 +11,7 @@
 
 ```yaml
 resources:
-  - url: /local/tankerkoenig-card.js?v=0.0.1
+  - url: /local/tankerkoenig-card.js?v=1.0.0
     type: js
 views:
   - cards:
@@ -20,6 +20,8 @@ views:
         show:
           - e5
           - e10
+		show_closed: true
+		show_header: false
         stations:
           - name: Kölner Str.
             brand: ARAL
@@ -32,11 +34,13 @@ views:
 ```
 
 ### Options
-| key        | values            | required | description
-|------------|-------------------|----------|---
-| `name`     | String            | yes      | Name of the card that should be shown in the frontend
-| `show`     | [e5, e10, diesel] | yes      | What should be shown
-| `stations` | List of stations  | yes      | List of stations
+| key           | values            | required | description
+|---------------|-------------------|----------|---
+| `name`        | String            | yes      | Name of the card that should be shown in the frontend
+| `show`        | [e5, e10, diesel] | yes      | What should be shown
+| `show_closed` | Boolean           | no       | Show closed stations (default: false)
+| `show_header` | Boolean           | no       | Show card-header (default: true)
+| `stations`    | List of stations  | yes      | List of stations
 
 #### Stations
 | key      | value  | required | description
@@ -50,16 +54,16 @@ views:
 *only required if it should be shown
 
 ## Additional
-To use the icons you have to use uppercase names, which has to be the same as in the `brand` settings. The icons must be in `*.png` format.
+To use the icons you have to use lowercase names, which has to be the same as in the `brand` settings. The icons must be in `*.png` format.
 
 ### Example
 For the brand ARAL there has to be an icon with the following path:
 
-`/www/gasstation_logos/ARAL.png`
+`/www/gasstation_logos/aral.png`
 
 # Support me / Follow me
 [![Web](https://img.shields.io/badge/www-panbachi.de-blue.svg?style=flat-square&colorB=3d72a8&colorA=333333)](https://www.panbachi.de)
 [![Facebook](https://img.shields.io/badge/-%40panbachi.de-blue.svg?style=flat-square&logo=facebook&colorB=3B5998&colorA=eee)](https://www.facebook.com/panbachi.de/)
 [![Twitter](https://img.shields.io/badge/-%40panbachi-blue.svg?style=flat-square&logo=twitter&colorB=1DA1F2&colorA=eee)](https://twitter.com/panbachi)
 [![Instagram](https://img.shields.io/badge/-%40panbachi.de-blue.svg?style=flat-square&logo=instagram&colorB=E4405F&colorA=eee)](http://instagram.com/panbachi.de)
-[![YouTube](https://img.shields.io/badge/-%40panbachi-blue.svg?style=flat-square&logo=youtube&colorB=FF0000&colorA=eee)](https://www.youtube.com/channel/UCO7f2L7ZsDCpOtRfKnPqNow)
+[![YouTube](https://img.shields.io/badge/-%40panbachi-blue.svg?style=flat-square&logo=youtube&colorB=FF0000&colorA=eee&logoColor=FF0000)](https://www.youtube.com/channel/UCO7f2L7ZsDCpOtRfKnPqNow)
