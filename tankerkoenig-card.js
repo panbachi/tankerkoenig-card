@@ -101,16 +101,15 @@ class TankerkoenigCard extends LitElement {
             
         if(state && state.state != 'unknown' && state.state != 'unavailable' && this.isOpen(station)) {
             return html`<td><ha-label-badge
-              value="${state.state}&euro;"
               label="${type.toUpperCase()}"
               @click="${() => this.fireEvent('hass-more-info', station[type])}"
-              ></state-element></td>`;
+              ><span style="font-size: 75%;">${state.state}&euro;</span></ha-label-badge></td>`;
         } else {
             return html`<td><ha-label-badge
               icon="mdi:lock-outline"
               label="${type.toUpperCase()}"
               @click="${() => this.fireEvent('hass-more-info', station[type])}"
-              ></state-element></td>`;
+              ></ha-label-badge></td>`;
         }
     }
     
@@ -154,6 +153,7 @@ class TankerkoenigCard extends LitElement {
             td.name { text-align: left; font-weight: bold; }
             td.gasstation img { vertical-align: middle; }
             ha-label-badge { font-size: 85%; }
+            .label-badge .value { font-size: 70%; }
         `;
     }
 }
