@@ -152,7 +152,7 @@ class TankerkoenigCard extends LitElement {
             td { text-align: center; padding-top: 10px; }
             td.name { text-align: left; font-weight: bold; }
             td.gasstation img { vertical-align: middle; }
-            ha-label-badge { font-size: 85%; }
+            ha-label-badge { font-size: 85%; cursor: pointer; }
             .label-badge .value { font-size: 70%; }
         `;
     }
