@@ -91,6 +91,16 @@ class TankerkoenigCard extends LitElement {
         
         return false;
     }
+
+    isClosed(station) {
+        const state = this.getStationState(station);
+        
+        if(state && state.attributes.is_open == false) {
+            return true;
+        }
+        
+        return false;
+    }
     
     renderPrice(station, type) {
         if(!this.has[type]) {
@@ -100,16 +110,21 @@ class TankerkoenigCard extends LitElement {
         const state = this.hass.states[station[type]] || null;
             
         if(state && state.state != 'unknown' && state.state != 'unavailable' && this.isOpen(station)) {
+            const price = parseFloat(state.state).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            const sup = this.config.show_sup ? state.state.substr(state.state.indexOf('.') + 3) : '';
             return html`<td><ha-label-badge
               label="${type.toUpperCase()}"
               @click="${() => this.fireEvent('hass-more-info', station[type])}"
-              ><span style="font-size: 75%;">${state.state}&euro;</span></ha-label-badge></td>`;
+              ><span>${price}<sup>${sup}</sup>&euro;</span></ha-label-badge></td>`;
         } else {
+            const icon = this.isClosed(station) ? 'mdi:sleep' : 'mdi:minus';
             return html`<td><ha-label-badge
-              icon="mdi:lock-outline"
               label="${type.toUpperCase()}"
               @click="${() => this.fireEvent('hass-more-info', station[type])}"
-              ></ha-label-badge></td>`;
+              ><ha-icon icon="${icon}"/></ha-label-badge></td>`;
         }
     }
     
@@ -153,7 +168,9 @@ class TankerkoenigCard extends LitElement {
             td.name { text-align: left; font-weight: bold; }
             td.gasstation img { vertical-align: middle; }
             ha-label-badge { font-size: 85%; }
+            ha-label-badge span { font-size: 75%; position: relative; top: -3px;}
             .label-badge .value { font-size: 70%; }
+            ha-icon { position: relative; top: -3px; --mdc-icon-size: 20px;  height: 20px; width: 20px; }
         `;
     }
 }
