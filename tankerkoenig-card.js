@@ -120,7 +120,9 @@ class TankerkoenigCard extends LitElement {
               @click="${() => this.fireEvent('hass-more-info', station[type])}"
               ><span>${price}<sup>${sup}</sup>&euro;</span></ha-label-badge></td>`;
         } else {
-            const icon = this.isClosed(station) ? 'mdi:sleep' : 'mdi:minus';
+            const icon_closed = this.config.icon_closed ?? 'mdi:lock-outline';
+            const icon_unknown = this.config.icon_unknown ?? 'mdi:minus';
+            const icon = this.isClosed(station) ? icon_closed : icon_unknown;
             return html`<td><ha-label-badge
               label="${type.toUpperCase()}"
               @click="${() => this.fireEvent('hass-more-info', station[type])}"
