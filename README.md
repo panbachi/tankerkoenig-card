@@ -22,6 +22,7 @@ views:
           - e10
         show_closed: true
         show_header: false
+        show_sup: true
         stations:
           - name: Kölner Str.
             brand: ARAL
@@ -40,6 +41,9 @@ views:
 | `show`        | [e5, e10, diesel] | yes      | What should be shown
 | `show_closed` | Boolean           | no       | Show closed stations (default: false)
 | `show_header` | Boolean           | no       | Show card-header (default: true)
+| `show_sup`    | Boolean           | no       | Show superscript third decimal place in prices (default: false)
+| `icon_closed` | String            | no       | Icon for closed stations (default: mdi:lock-outline)
+| `show_unknown`| String            | no       | Icon for unknown states (default: mdi:minus)
 | `stations`    | List of stations  | yes      | List of stations
 
 #### Stations
