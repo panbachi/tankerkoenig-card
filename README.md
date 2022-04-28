@@ -27,12 +27,12 @@ views:
             brand: ARAL
             e5: sensor.aral_kolner_str_e5
             e10: sensor.aral_kolner_str_e10
-			state: binary_sensor.aral_kolner_str_status
+            state: binary_sensor.aral_kolner_str_status
           - name: Untergath
             brand: ARAL
             e5: sensor.aral_untergath_e5
             e10: sensor.aral_untergath_e10
-			state: binary_sensor.aral_untergath_status
+            state: binary_sensor.aral_untergath_status
 ```
 
 ### Options
