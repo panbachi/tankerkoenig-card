@@ -83,13 +83,8 @@ class TankerkoenigCard extends LitElement {
     }
     
     isOpen(station) {
-        const state = this.getStationState(station);
-        
-        if(state && state.attributes.is_open) {
-            return true;
-        }
-        
-        return false;
+        const state = this.hass.states[station.state].state;
+        return state == "on";
     }
     
     renderPrice(station, type) {

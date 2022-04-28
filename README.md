@@ -1,6 +1,6 @@
 ﻿# Tankerkoenig Lovelace Card
 
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg?style=for-the-badge)](#) [![mantained](https://img.shields.io/maintenance/yes/2021.svg?style=for-the-badge)](#) [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
+[![Version](https://img.shields.io/badge/version-1.0.0-green.svg?style=for-the-badge)](#) [![mantained](https://img.shields.io/maintenance/yes/2022.svg?style=for-the-badge)](#) [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
 [![maintainer](https://img.shields.io/badge/maintainer-Goran%20Zunic%20%40panbachi-blue.svg?style=for-the-badge)](https://www.panbachi.de)
 
@@ -27,10 +27,12 @@ views:
             brand: ARAL
             e5: sensor.aral_kolner_str_e5
             e10: sensor.aral_kolner_str_e10
+			state: binary_sensor.aral_kolner_str_status
           - name: Untergath
             brand: ARAL
             e5: sensor.aral_untergath_e5
             e10: sensor.aral_untergath_e10
+			state: binary_sensor.aral_untergath_status
 ```
 
 ### Options
@@ -50,6 +52,7 @@ views:
 | `e5`     | Sensor | no*      | Sensor for the E5 price
 | `e10`    | Sensor | no*      | Sensor for the E10 price
 | `diesel` | Sensor | no*      | Sensor for the diesel price
+| `state`  | Sensor | yes      | Sensor of station state
 
 *only required if it should be shown
 
